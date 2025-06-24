@@ -1,0 +1,481 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Readify Library Login/Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+  <style>
+   body, html {
+     height: 100%;
+     font-family: 'Inter', sans-serif;
+     margin: 0;
+   }
+   input::-moz-focus-inner {
+     border: 0;
+   }
+   /* Visually hidden class for accessibility */
+   .visually-hidden {
+     position: absolute !important;
+     width: 1px !important;
+     height: 1px !important;
+     padding: 0 !important;
+     margin: -1px !important;
+     overflow: hidden !important;
+     clip: rect(0, 0, 0, 0) !important;
+     white-space: nowrap !important;
+     border: 0 !important;
+   }
+   button.active {
+     background-color: #f47920 !important;
+     box-shadow: 0 4px 14px 0 rgba(244, 121, 32, 0.6) !important;
+     color: white !important;
+   }
+   button.active:focus {
+     outline: none !important;
+     box-shadow: 0 0 0 4px rgba(244, 121, 32, 0.5) !important;
+   }
+   button:not(.active) {
+     background-color: transparent !important;
+     color: #ffffffb3 !important;
+     transition: color 0.3s ease;
+   }
+   button:not(.active):hover,
+   button:not(.active):focus {
+     color: #f47920 !important;
+     outline: none !important;
+   }
+   .btn-submit {
+     background-image: linear-gradient(to right, #f47920, #f4a020);
+   }
+   .btn-submit:hover {
+     background-image: linear-gradient(to right, #f4a020, #f47920);
+   }
+   .btn-submit:focus {
+     outline: none;
+     box-shadow: 0 0 0 4px rgba(244, 121, 32, 0.5);
+   }
+   .loader-circle {
+    border-style: solid;
+    border-radius: 50%;
+    border-width: 4px;
+    width: 3rem;
+    height: 3rem;
+    border-color: #f47920 #f4a020 #fff #fff;
+  }
+  </style>
+ </head>
+ <body class="min-h-screen flex flex-col md:flex-row">
+  <div class="hidden md:flex flex-1 relative h-screen">
+   <img alt="Library background image with bookshelves and warm lighting, cozy reading atmosphere" class="absolute inset-0 w-full h-full object-cover brightness-110" height="1200" src="https://storage.googleapis.com/a1aa/image/ea5e6ea1-d1d8-49d0-2d81-385548366a00.jpg" width="800"/>
+   <div class="absolute inset-0 bg-[#05346b] bg-opacity-60"></div>
+   <div class="relative z-10 flex flex-col items-center justify-center gap-2 px-8 w-full">
+    <div class="flex items-center justify-center gap-4 w-full">
+     <img alt="Readify logo icon with open book and text Readify" class="w-16 h-16 flex-shrink-0" height="64" src="https://storage.googleapis.com/a1aa/image/24cd9489-db90-4b70-58a3-98bd6b8c9b76.jpg" width="64"/>
+     <div class="text-white select-none font-extrabold text-4xl leading-tight">
+      <span class="text-[#f47920]">Readify</span><br/>LIBRARY
+     </div>
+    </div>
+    <div class="text-white/80 select-none text-center text-sm md:text-base font-medium max-w-xs">
+     Store, Access, and Read Anywhere.
+    </div>
+   </div>
+  </div>
+
+  <main class="flex flex-col flex-1 justify-center items-center min-h-screen px-8 py-12 md:py-24 md:px-16 bg-gradient-to-br from-[#05346b] via-[#0a2a4d] to-[#1e3a5c] text-white relative overflow-hidden" role="main" aria-label="Authentication container">
+    <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#f47920] opacity-30 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-[#f4a020] opacity-20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="w-full max-w-md flex flex-col gap-8 z-10">
+      <header class="text-center"></header>
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 flex flex-col gap-8 border border-white/20">
+        <nav class="flex justify-center gap-6" role="tablist" aria-label="Sign up and sign in toggle">
+          <button id="signup-tab" aria-selected="true" aria-controls="signup-form" role="tab" class="active font-semibold px-4 py-2 rounded-lg shadow-md focus:outline-none focus:ring-4" tabindex="0">Sign Up</button>
+          <button id="signin-tab" aria-selected="false" aria-controls="signin-form" role="tab" class="font-semibold px-4 py-2 rounded-lg focus:outline-none focus:ring-4" tabindex="-1">Sign In</button>
+        </nav>
+        <form id="signup-form" class="flex flex-col gap-6" aria-labelledby="signup-tab" novalidate autocomplete="off">
+          <div class="relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none select-none">email</span>
+            <input type="email" id="signup-email" name="email" placeholder="Email address" required autocomplete="off" aria-describedby="signup-email-error" class="w-full rounded-xl bg-white/20 placeholder-white/70 text-white py-3 pl-12 pr-4 focus:bg-white/40 focus:outline-none transition"/>
+            <span id="signup-email-error" class="visually-hidden" aria-live="assertive"></span>
+          </div>
+          <div class="relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none select-none">lock</span>
+            <input type="password" id="signup-password" name="password" placeholder="Password" required autocomplete="off" minlength="6" aria-describedby="signup-password-error" class="w-full rounded-xl bg-white/20 placeholder-white/70 text-white py-3 pl-12 pr-4 focus:bg-white/40 focus:outline-none transition"/>
+            <span id="signup-password-error" class="visually-hidden" aria-live="assertive"></span>
+          </div>
+          <div class="relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none select-none">lock</span>
+            <input type="password" id="signup-confirm-password" name="confirm-password" placeholder="Confirm Password" required autocomplete="off" minlength="6" aria-describedby="signup-confirm-password-error" class="w-full rounded-xl bg-white/20 placeholder-white/70 text-white py-3 pl-12 pr-4 focus:bg-white/40 focus:outline-none transition"/>
+            <span id="signup-confirm-password-error" class="visually-hidden" aria-live="assertive"></span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="signup-terms" name="terms" required aria-describedby="signup-terms-error" class="w-5 h-5 rounded border-white/50 bg-white/20 text-[#f47920] focus:ring-[#f47920] focus:outline-none"/>
+            <label for="signup-terms" class="text-white/80 text-sm select-none cursor-pointer">I agree to the <a href="#" class="underline hover:text-[#f47920] focus:outline-none focus:ring-2 focus:ring-[#f47920]" tabindex="0">Terms of Service</a> and <a href="#" class="underline hover:text-[#f47920] focus:outline-none focus:ring-2 focus:ring-[#f47920]" tabindex="0">Privacy Policy</a>.</label>
+          </div>
+          <span id="signup-terms-error" class="visually-hidden" aria-live="assertive"></span>
+          <button type="submit" class="btn-submit rounded-xl py-3 font-semibold text-white shadow-lg focus:outline-none focus:ring-4 transition select-none">Create Account</button>
+        </form>
+        <form id="signin-form" class="hidden flex-col gap-6" aria-labelledby="signin-tab" novalidate>
+          <div class="relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none select-none">email</span>
+            <input type="email" id="signin-email" name="email" placeholder="Email address" required autocomplete="email" aria-describedby="signin-email-error" class="w-full rounded-xl bg-white/20 placeholder-white/70 text-white py-3 pl-12 pr-4 focus:bg-white/40 focus:outline-none transition"/>
+            <span id="signin-email-error" class="visually-hidden" aria-live="assertive"></span>
+          </div>
+          <div class="relative">
+            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none select-none">lock</span>
+            <input type="password" id="signin-password" name="password" placeholder="Password" required autocomplete="current-password" aria-describedby="signin-password-error" class="w-full rounded-xl bg-white/20 placeholder-white/70 text-white py-3 pl-12 pr-4 focus:bg-white/40 focus:outline-none transition"/>
+            <span id="signin-password-error" class="visually-hidden" aria-live="assertive"></span>
+          </div>
+          <div class="text-right text-white/80 text-sm select-none">
+            <a href="#" id="forgot-password-link" tabindex="0" class="hover:text-white focus:outline-none focus:underline">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn-submit rounded-xl py-3 font-semibold text-white shadow-lg focus:outline-none focus:ring-4 transition select-none">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <div id="signup-loader" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+  <div class="flex flex-col items-center">
+    <span class="loader-circle animate-spin border-4 border-t-[#f47920] border-b-[#f4a020] border-l-white border-r-white rounded-full w-12 h-12 mb-4"></span>
+    <span class="text-white font-semibold">Creating account...</span>
+  </div>
+</div>
+
+  <script>
+   // Elements for toggling
+   const signupTab = document.getElementById('signup-tab');
+   const signinTab = document.getElementById('signin-tab');
+   const signupForm = document.getElementById('signup-form');
+   const signinForm = document.getElementById('signin-form');
+
+   // Accessibility helper to toggle aria-selected and tabindex for tab buttons
+   function activateTab(tabToActivate, tabToDeactivate) {
+     tabToActivate.classList.add('active');
+     tabToActivate.setAttribute('aria-selected', 'true');
+     tabToActivate.setAttribute('tabindex', '0');
+     tabToActivate.focus();
+
+     tabToDeactivate.classList.remove('active');
+     tabToDeactivate.setAttribute('aria-selected', 'false');
+     tabToDeactivate.setAttribute('tabindex', '-1');
+   }
+
+   function showForm(show, hide) {
+     show.classList.remove('hidden');
+     show.classList.add('flex');
+     hide.classList.add('hidden');
+     hide.classList.remove('flex');
+   }
+
+   signupTab.addEventListener('click', () => {
+     activateTab(signupTab, signinTab);
+     showForm(signupForm, signinForm);
+   });
+   signinTab.addEventListener('click', () => {
+     activateTab(signinTab, signupTab);
+     showForm(signinForm, signupForm);
+   });
+
+
+   // Show error text
+   function showError(input, errorId, message) {
+     const errorSpan = document.getElementById(errorId);
+     errorSpan.textContent = message;
+     errorSpan.classList.remove('visually-hidden');
+     input.setAttribute('aria-invalid', 'true');
+   }
+
+   function clearError(input, errorId) {
+     const errorSpan = document.getElementById(errorId);
+     errorSpan.textContent = '';
+     errorSpan.classList.add('visually-hidden');
+     input.removeAttribute('aria-invalid');
+   }
+
+   // Generic form validate function
+   function validateForm(form, fields) {
+     let valid = true;
+     fields.forEach(({id, errorId, validate, message}) => {
+       const input = form.querySelector(`#${id}`);
+       if (!validate(input.value)) {
+         showError(input, errorId, message);
+         valid = false;
+       } else {
+         clearError(input, errorId);
+       }
+     });
+     return valid;
+   }
+
+   // Keyboard accessibility: allow toggle with arrow keys
+   const toggleButtons = [signupTab, signinTab];
+   toggleButtons.forEach((btn, idx) => {
+     btn.addEventListener('keydown', (e) => {
+       if (e.key === 'ArrowRight') {
+         e.preventDefault();
+         const nextIdx = (idx + 1) % toggleButtons.length;
+         toggleButtons[nextIdx].click();
+       } else if (e.key === 'ArrowLeft') {
+         e.preventDefault();
+         const prevIdx = (idx - 1 + toggleButtons.length) % toggleButtons.length;
+         toggleButtons[prevIdx].click();
+       }
+     });
+   });
+
+   function showSiteNameOnMobile() {
+  const siteNameId = 'mobile-site-name';
+  let siteName = document.getElementById(siteNameId);
+
+  if (window.innerWidth < 768) { // Tailwind's md: breakpoint is 768px
+    if (!siteName) {
+      siteName = document.createElement('div');
+      siteName.id = siteNameId;
+      siteName.className = 'flex flex-col items-center mb-6';
+
+      siteName.innerHTML = `
+        <img src="https://storage.googleapis.com/a1aa/image/24cd9489-db90-4b70-58a3-98bd6b8c9b76.jpg" alt="Readify logo" class="w-14 h-14 mb-2" />
+        <div class="text-3xl font-extrabold leading-tight">
+          <span class="text-[#f47920]">Readify</span> <span class="text-white">LIBRARY</span>
+        </div>
+        <div class="text-white/80 text-center text-sm font-medium mt-1">
+          Store, Access, and Read Anywhere.
+        </div>
+      `;
+      document.querySelector('main').prepend(siteName);
+    }
+  } else {
+    if (siteName) siteName.remove();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', showSiteNameOnMobile);
+window.addEventListener('resize', showSiteNameOnMobile);
+
+// If the URL contains a confirmation hash, show the sign-in form
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.location.hash.includes('type=signup')) {
+    // Switch to sign-in tab and form
+    const signinTab = document.getElementById('signin-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    signinTab.classList.add('active');
+    signinTab.setAttribute('aria-selected', 'true');
+    signinTab.setAttribute('tabindex', '0');
+    signupTab.classList.remove('active');
+    signupTab.setAttribute('aria-selected', 'false');
+    signupTab.setAttribute('tabindex', '-1');
+    signinForm.classList.remove('hidden');
+    signinForm.classList.add('flex');
+    signupForm.classList.add('hidden');
+    signupForm.classList.remove('flex');
+    // Optionally, show a message
+    alert('Email confirmed! Please sign in.');
+  }
+});
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+const SUPABASE_URL = 'https://kkqommfzihiigszwtect.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrcW9tbWZ6aWhpaWdzend0ZWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5OTc1NjQsImV4cCI6MjA2NTU3MzU2NH0.exGr87NfNMhDVXqEDCwdv1AmUxmiLiM5RX8w5e2_4Y8';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const hash = window.location.hash;
+
+  if (hash.includes('access_token')) {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      console.error('No user found or user not confirmed yet:', error);
+      return;
+    }
+
+    // Check if user already exists in the users table
+    const { data: existingUser, error: selectError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    if (!existingUser) {
+      const { error: insertError } = await supabase.from('users').insert([
+        {
+          id: user.id,
+          email: user.email,
+          in_premium: false
+        }
+      ]);
+
+      if (insertError) {
+        console.error('Insert failed:', insertError.message);
+      } else {
+        console.log('✅ User inserted into users table after confirmation.');
+      }
+    } else {
+      console.log('ℹ️ User already exists in users table.');
+    }
+  }
+});
+
+
+
+// SIGN UP
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const loader = document.getElementById('signup-loader');
+
+  // Clear previous errors
+  clearError(document.getElementById('signup-email'), 'signup-email-error');
+  clearError(document.getElementById('signup-password'), 'signup-password-error');
+  clearError(document.getElementById('signup-confirm-password'), 'signup-confirm-password-error');
+  clearError(document.getElementById('signup-terms'), 'signup-terms-error');
+
+  // Validate inputs
+  let valid = true;
+
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  const termsChecked = document.getElementById('signup-terms').checked;
+
+  // Email validation
+  if (!email) {
+    showError(document.getElementById('signup-email'), 'signup-email-error', 'Email is required.');
+    valid = false;
+  } else {
+    // Basic email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showError(document.getElementById('signup-email'), 'signup-email-error', 'Please enter a valid email address.');
+      valid = false;
+    }
+  }
+
+  // Password validation
+  if (!password) {
+    showError(document.getElementById('signup-password'), 'signup-password-error', 'Password is required.');
+    valid = false;
+  } else if (password.length < 6) {
+    showError(document.getElementById('signup-password'), 'signup-password-error', 'Password must be at least 6 characters.');
+    valid = false;
+  }
+
+  // Confirm password validation
+  if (!confirmPassword) {
+    showError(document.getElementById('signup-confirm-password'), 'signup-confirm-password-error', 'Please confirm your password.');
+    valid = false;
+  } else if (password !== confirmPassword) {
+    showError(document.getElementById('signup-confirm-password'), 'signup-confirm-password-error', 'Passwords do not match.');
+    valid = false;
+  }
+
+  // Terms checkbox validation
+  if (!termsChecked) {
+    showError(document.getElementById('signup-terms'), 'signup-terms-error', 'You must agree to the terms and privacy policy.');
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  loader.classList.remove('hidden');
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: 'http://127.0.0.1:5500/signup.html'
+    }
+  });
+
+  if (error) {
+    loader.classList.add('hidden');
+    alert('Signup failed: ' + error.message);
+    return;
+  }
+  if (data.user) {
+    await supabase.from('users').insert([
+      {
+        id: data.user.id,
+        email: email,
+        in_premium: false
+      }
+    ]);
+  }
+  loader.classList.add('hidden');
+  alert('Signup success! Please check your email to confirm.');
+});
+
+// SIGN IN
+document.getElementById('signin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Clear previous errors
+  clearError(document.getElementById('signin-email'), 'signin-email-error');
+  clearError(document.getElementById('signin-password'), 'signin-password-error');
+
+  let valid = true;
+
+  const email = document.getElementById('signin-email').value.trim();
+  const password = document.getElementById('signin-password').value;
+
+  if (!email) {
+    showError(document.getElementById('signin-email'), 'signin-email-error', 'Email is required.');
+    valid = false;
+  } else {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showError(document.getElementById('signin-email'), 'signin-email-error', 'Please enter a valid email address.');
+      valid = false;
+    }
+  }
+
+  if (!password) {
+    showError(document.getElementById('signin-password'), 'signin-password-error', 'Password is required.');
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    alert('Sign in failed: ' + error.message);
+    return;
+  }
+
+  // Insert user into users table if not already present
+  const { user } = data;
+  if (user) {
+    // Check if user already exists
+    const { data: existing } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    if (!existing) {
+      await supabase.from('users').insert([
+        {
+          id: user.id,
+          email: user.email,
+          in_premium: false
+        }
+      ]);
+    }
+  }
+
+  // Redirect to home.html after successful sign in
+  window.location.href = "home.html";
+});
+
+// Redirect to signup page if URL contains specific hash
+if (window.location.hash.includes('type=signup') || window.location.hash.includes('access_token')) {
+  window.location.href = 'signup.html' + window.location.hash;
+}
+</script>
+ </body>
+</html>
