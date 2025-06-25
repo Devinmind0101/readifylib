@@ -1421,8 +1421,7 @@
     const accountStatus = document.getElementById("accountStatus");
     const logoutBtn = document.getElementById("logoutBtn");
     const goPremiumBtn = document.getElementById("goPremiumBtn");
-   const inPremiumBadge = document.getElementById("isPremiumBadge");
-
+    const isPremiumBadge = document.getElementById("isPremiumBadge");
     const storageText = document.getElementById("storageText");
     const storageProgressFill = document.getElementById("storageProgressFill");
     const storageWarning = document.getElementById("storageWarning");
@@ -1478,13 +1477,13 @@
         
         if (userError) {
           console.error('Error fetching user data:', userError);
-          inPremium = false;
+          isPremium = false;
         } else {
           isPremium = userData?.in_premium || false;
         }
         
         // Set storage limit based on premium status
-        maxStorage = inPremium ? (5 * 1024 * 1024 * 1024) : (500 * 1024 * 1024); // 5GB : 500MB
+        maxStorage = isPremium ? (5 * 1024 * 1024 * 1024) : (500 * 1024 * 1024); // 5GB : 500MB
         
         return user;
       } catch (error) {
@@ -1510,12 +1509,12 @@
       document.getElementById('userMenuButton').textContent = userEmail;
       
       // Update premium status
-      if (inPremium) {
-        inPremiumBadge.classList.remove('hidden');
+      if (isPremium) {
+        isPremiumBadge.classList.remove('hidden');
         accountStatus.textContent = 'Premium Member';
         goPremiumBtn.style.display = 'none';
       } else {
-        inPremiumBadge.classList.add('hidden');
+        isPremiumBadge.classList.add('hidden');
         accountStatus.textContent = 'Free Account';
         goPremiumBtn.style.display = 'block';
       }
@@ -2153,7 +2152,7 @@
       const totalFileSize = fileInput.size + (coverInput ? coverInput.size : 0);
       if (!hasEnoughStorage(totalFileSize)) {
         const remainingSpace = maxStorage - calculateUsedStorage();
-        alert(`Not enough storage space! You need ${formatBytes(totalFileSize)} but only have ${formatBytes(remainingSpace)} remaining.${!inPremium ? ' Upgrade to Premium for 5GB of storage!' : ''}`);
+        alert(`Not enough storage space! You need ${formatBytes(totalFileSize)} but only have ${formatBytes(remainingSpace)} remaining.${!isPremium ? ' Upgrade to Premium for 5GB of storage!' : ''}`);
         return;
       }
 
